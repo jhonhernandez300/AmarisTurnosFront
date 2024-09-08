@@ -1,0 +1,77 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card" style="width: 100%; max-width: 400px;">
+    <div class="card-header text-center">
+      <h4>Login</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="myForm" id="the-form" (ngSubmit)="onSubmit()">
+        
+        <div class="form-group">
+          <label for="CorreoElectronico">Correo Electrónico</label>
+          <input
+            type="text"
+            formControlName="CorreoElectronico"
+            placeholder="Correo Electrónico"
+            id="CorreoElectronico"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && form['CorreoElectronico'].errors }"
+          />
+          <div *ngIf="submitted && form['CorreoElectronico'].errors" class="invalid-feedback">
+            <div *ngIf="form['CorreoElectronico']?.errors?.['required']">Requerido</div>
+            <div *ngIf="form['CorreoElectronico']?.errors?.['pattern']">Formato de correo electrónico inválido</div>
+            <div *ngIf="form['CorreoElectronico']?.errors?.['minlength']">Mínimo de 3 caracteres</div>
+            <div *ngIf="form['CorreoElectronico']?.errors?.['maxlength']">Máximo de 30 caracteres</div>
+            <div *ngIf="submitted && form['CorreoElectronico'].errors && form['CorreoElectronico'].errors['correoExiste']" class="invalid-feedback">
+              <div>El correo electrónico ya está registrado</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="Password">Password</label>
+          <input
+            type="text"
+            formControlName="Password"
+            placeholder="Password"
+            id="Password"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': submitted && form['Password'].errors }"
+          />
+          <div *ngIf="submitted && form['Password'].errors" class="invalid-feedback">
+            <div *ngIf="form['Password']?.errors?.['required']">Requerido</div>
+            <div *ngIf="form['Password']?.errors?.['minlength']">Mínimo de 3 caracteres</div>
+            <div *ngIf="form['Password']?.errors?.['maxlength']">Máximo de 30 caracteres</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </div>
+        <div class="form-group">
+          <button type="button" class="btn btn-secondary w-100" (click)="onReset()">Limpiar</button>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal HTML -->
+<div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ errorMessage }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
