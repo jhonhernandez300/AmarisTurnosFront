@@ -1,4 +1,4 @@
-export interface iTurnoSinId {    
+export interface iTurnoConId {    
     IdTurno: number,   
     IdUsuario: number,
     IdSucursal: number,

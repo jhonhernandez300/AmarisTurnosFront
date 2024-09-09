@@ -1,0 +1,71 @@
+<div class="container d-flex justify-content-center align-items-center vh-50">
+    <div class="card" style="width: 100%; max-width: 400px;">
+      <div class="card-header text-center">
+        <h4>Login</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="myForm" id="the-form" (ngSubmit)="onSubmit()">
+  
+          <div class="form-group">
+            <label for="Turno">Turno</label>
+            <input
+              type="text"
+              formControlName="Turno"
+              placeholder="Turno"
+              id="Turno"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': submitted && form['Turno'].errors }"
+            />
+            <div *ngIf="submitted && form['Turno'].errors" class="invalid-feedback">
+              <div *ngIf="form['Turno']?.errors?.['required']">Requerido</div>             
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary w-100">Buscar</button>
+          </div>
+          <div class="form-group">
+            <button type="button" class="btn btn-secondary w-100" (click)="onReset()">Limpiar</button>
+          </div>
+          
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+<div class="container pt-1" *ngIf="mostrarTabla == true">
+    <div class="card">
+      <div class="card-header">
+        <h2>Turno Encontrado</h2>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Turno</th>
+              <th>ID Usuario</th>
+              <th>ID Sucursal</th>
+              <th>Fecha Turno</th>
+              <th>Estado</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ turnoEncontrado.IdTurno }}</td>
+              <td>{{ turnoEncontrado.IdUsuario }}</td>
+              <td>{{ turnoEncontrado.IdSucursal }}</td>
+              <td>{{ turnoEncontrado.FechaTurno | date: 'short' }}</td>
+              <td>{{ turnoEncontrado.Estado }}</td>
+              <td *ngIf="botonAMostrar == 'activar'"><button class="btn btn-success" (click)="activarTurno()">Activado</button></td>
+              <td *ngIf="botonAMostrar == 'atender'"><button class="btn btn-secondary ml-2" (click)="atenderTurno()">Atendido</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+  

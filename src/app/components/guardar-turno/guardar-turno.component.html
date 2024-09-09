@@ -1,86 +1,33 @@
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="card" style="width: 100%; max-width: 400px;">
+<div class="container d-flex justify-content-center align-items-start vh-100 mt-3">
+  <div class="d-flex justify-content-between" style="width: 100%; max-width: 800px;">
+    
+    <!-- Div Crear Turno -->
+    <div class="card mr-3" style="width: 100%; max-width: 400px;" id="crear-turno" *ngIf="mostrarCrearTurno == true">
       <div class="card-header text-center">
         <h4>Reservar Turno</h4>
       </div>
       <div class="card-body">
         <form [formGroup]="turnoForm" id="turno-form" (ngSubmit)="onSubmit()">
-          
-          <div class="form-group">
-            <label for="IdUsuario">ID Usuario</label>
-            <input
-              type="number"
-              formControlName="IdUsuario"
-              placeholder="ID Usuario"
-              id="IdUsuario"
-              class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && turnoForm.get('IdUsuario')?.errors }"
-            />
-            <div *ngIf="submitted && turnoForm.get('IdUsuario')?.errors" class="invalid-feedback">
-              <div *ngIf="turnoForm.get('IdUsuario')?.errors?.['required']">Requerido</div>
-              <div *ngIf="turnoForm.get('IdUsuario')?.errors?.['min']">Valor mínimo requerido</div>
-              <div *ngIf="turnoForm.get('IdUsuario')?.errors?.['max']">Valor máximo permitido</div>
-            </div>
+          <div class="form-group mb-2">
+            <!-- Aquí van los inputs -->
           </div>
-  
-          <div class="form-group">
-            <label for="IdSucursal">ID Sucursal</label>
-            <input
-              type="number"
-              formControlName="IdSucursal"
-              placeholder="ID Sucursal"
-              id="IdSucursal"
-              class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && turnoForm.get('IdSucursal')?.errors }"
-            />
-            <div *ngIf="submitted && turnoForm.get('IdSucursal')?.errors" class="invalid-feedback">
-              <div *ngIf="turnoForm.get('IdSucursal')?.errors?.['required']">Requerido</div>
-              <div *ngIf="turnoForm.get('IdSucursal')?.errors?.['min']">Valor mínimo requerido</div>
-              <div *ngIf="turnoForm.get('IdSucursal')?.errors?.['max']">Valor máximo permitido</div>
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="FechaTurno">Fecha del Turno</label>
-            <input
-              type="date"
-              formControlName="FechaTurno"
-              id="FechaTurno"
-              class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && turnoForm.get('FechaTurno')?.errors }"
-            />
-            <div *ngIf="submitted && turnoForm.get('FechaTurno')?.errors" class="invalid-feedback">
-              <div *ngIf="turnoForm.get('FechaTurno')?.errors?.['required']">Requerido</div>
-            </div>
-          </div>
-  
-          <div class="form-group">
-            <label for="Estado">Estado</label>
-            <select
-              formControlName="Estado"
-              id="Estado"
-              class="form-control"
-              [ngClass]="{ 'is-invalid': submitted && turnoForm.get('Estado')?.errors }"
-            >
-              <option value="">Seleccione un estado</option>
-              <option value="Activo">Activo</option>
-              <option value="Expirado">Expirado</option>
-              <option value="Atendido">Atendido</option>
-            </select>
-            <div *ngIf="submitted && turnoForm.get('Estado')?.errors" class="invalid-feedback">
-              <div *ngIf="turnoForm.get('Estado')?.errors?.['required']">Requerido</div>
-            </div>
-          </div>
-  
-          <div class="form-group">
+
+          <div class="form-group mb-2">
             <button type="submit" class="btn btn-primary w-100">Reservar</button>
           </div>
-          <div class="form-group">
-            <button type="button" class="btn btn-secondary w-100" (click)="onReset()">Limpiar</button>
-          </div>
-          
         </form>
       </div>
     </div>
+
+    <!-- Div Turno Creado -->
+    <div class="card text-center" style="width: 100%; max-width: 400px;" *ngIf="mostrarFechaYHora" id="turno-creado">
+      <div class="card-body">
+        <h2 class="card-title">TURNO CREADO</h2>
+        <div class="card-text">{{ turno }}</div>
+        <div class="card-text">{{ fechaYhora }}</div>
+      </div>
+    </div>
+    
   </div>
-  
+</div>
+
