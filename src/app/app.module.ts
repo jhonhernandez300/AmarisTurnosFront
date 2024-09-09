@@ -13,6 +13,7 @@ import { LoginComponent } from './components/login/login.component';
 import { HomeComponent } from './components/home/home.component';
 import { GuardarTurnoComponent } from './components/guardar-turno/guardar-turno.component';
 import { BuscarTurnoPorIdComponent } from './components/buscar-turno-por-id/buscar-turno-por-id.component';
+import { BuscarTurnosActivosComponent } from './components/buscar-turnos-activos/buscar-turnos-activos.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { BuscarTurnoPorIdComponent } from './components/buscar-turno-por-id/busc
     LoginComponent,
     HomeComponent,
     GuardarTurnoComponent,
-    BuscarTurnoPorIdComponent
+    BuscarTurnoPorIdComponent,
+    BuscarTurnosActivosComponent
   ],
   imports: [                
     BrowserModule,

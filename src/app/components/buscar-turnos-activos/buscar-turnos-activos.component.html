@@ -1,0 +1,33 @@
+<div class="container pt-1">
+    <div class="card">
+      <div class="card-header">
+        <h2>Turnos Activados</h2>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Turno</th>
+              <th>ID Usuario</th>
+              <th>ID Sucursal</th>
+              <th>Fecha Turno</th>
+              <th>Estado</th>
+              <th></th>              
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let turno of turnos">
+              <td>{{ turno.IdTurno }}</td>
+              <td>{{ turno.IdUsuario }}</td>
+              <td>{{ turno.IdSucursal }}</td>
+              <td>{{ turno.FechaTurno | date: 'short' }}</td>
+              <td>{{ turno.Estado }}</td>
+              <td>
+                <button class="btn btn-secondary ml-2" (click)="atenderTurno(turno)">Atender</button>
+              </td>
+            </tr>                  
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

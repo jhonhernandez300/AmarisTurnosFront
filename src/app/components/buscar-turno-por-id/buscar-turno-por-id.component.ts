@@ -116,8 +116,7 @@ export class BuscarTurnoPorIdComponent implements OnInit{
   atenderTurno(){
     this.turnoEncontrado.Estado = "Atendido";
     this.turnoService.ActualizarTurno(this.turnoEncontrado).subscribe(
-      (response: any) => {
-        console.log('response', response);   
+      (response: any) => {          
         this.botonAMostrar = "ninguno";  
         this.onReset();      
       },
