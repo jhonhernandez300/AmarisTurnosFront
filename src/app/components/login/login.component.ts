@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit{
 
   onSubmit() {
     this.submitted = true;
-    console.log("Form value ", this.myForm.value);            
+    //console.log("Form value ", this.myForm.value);            
 
     if (this.myForm.valid) {
       const usuarioCorto: iUsuarioCorto = {
@@ -79,7 +79,7 @@ export class LoginComponent implements OnInit{
           //console.log('response', response);
           this.localStorageService.setData('token', response.token);
           this.localStorageService.setData('id', response.idUsuario);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/guardar-turno']);
         },
         (error: any) => {
           console.error('Error:', error);

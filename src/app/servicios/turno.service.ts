@@ -33,6 +33,7 @@ export class TurnoService {
   }
 
   Crear(iTurnoSinId: iTurnoSinId): Observable<any> {         
+    console.log(iTurnoSinId);
     return this.http.post(`${this.apiUrl}/Turno/CrearTurno`, iTurnoSinId).pipe(
       catchError(error => {
           console.error('Error en la solicitud:', error);

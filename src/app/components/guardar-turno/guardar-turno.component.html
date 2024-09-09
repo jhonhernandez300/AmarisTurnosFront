@@ -9,13 +9,12 @@
       <div class="card-body">
         <form [formGroup]="turnoForm" id="turno-form" (ngSubmit)="onSubmit()">
           <div class="form-group mb-2">
-            <!-- Aquí van los inputs -->
-          </div>
-
-          <div class="form-group mb-2">
             <button type="submit" class="btn btn-primary w-100">Reservar</button>
           </div>
         </form>
+        <div *ngIf="showDiv" class="temporary-div">
+          {{ errorMessage }}
+        </div>
       </div>
     </div>
 
@@ -24,7 +23,7 @@
       <div class="card-body">
         <h2 class="card-title">TURNO CREADO</h2>
         <div class="card-text">{{ turno }}</div>
-        <div class="card-text">{{ fechaYhora }}</div>
+        <div class="card-text">{{ fechaYhora | date: 'short' }}</div>
       </div>
     </div>
     

@@ -1,25 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { TurnoService } from '../../servicios/turno.service';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { iTurnoConId } from '../../interfaces/iTurnoConId';
-import { ReactiveFormsModule } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
-import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { LocalStorageService } from '../../servicios/local-storage.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-buscar-turnos-activos',
   templateUrl: './buscar-turnos-activos.component.html',
-  styleUrl: './buscar-turnos-activos.component.css'
+  styleUrls: ['./buscar-turnos-activos.component.css']
 })
-export class BuscarTurnosActivosComponent implements OnInit{
+export class BuscarTurnosActivosComponent implements OnInit {
   errorMessage: string = '';
   mostrarTablaDetalle: boolean = false;
   botonAMostrar: string = "ninguno";
-  turnos:iTurnoConId[] = [];
+  turnos: iTurnoConId[] = [];
+  showDiv = false;
 
   turnoSeleccionado: iTurnoConId = {
     IdTurno: 0,
@@ -30,62 +24,77 @@ export class BuscarTurnosActivosComponent implements OnInit{
   };
 
   constructor(
-    private formBuilder: FormBuilder,
-    private modalService: NgbModal,
-    private turnoService: TurnoService
-  ){}
+    private turnoService: TurnoService,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
+    this.loadActiveTurns();
+  }
+
+  private loadActiveTurns(): void {
     this.turnoService.ObtenerTurnosActivados().subscribe(
       (response: any) => {
-        console.log('response', response);
-        this.turnos = response.map((turno: any) => ({
-          IdTurno: turno.idTurno,
-          IdUsuario: turno.idUsuario,
-          IdSucursal: turno.idSucursal,
-          FechaTurno: new Date(turno.fechaTurno),
-          Estado: turno.estado
-        }));
+        if (response.message === "No hay turnos activados.") {
+          this.handleEmptyTurns(response.message);
+        } else {
+          this.updateTurnos(response);
+        }
       },
-      (error: any) => {
-        console.error('Error:', error);
-        this.errorMessage = error;
-        this.openErrorModal();
-      }
+      (error: any) => this.handleError(error)
     );
   }
 
-  openErrorModal() {
-    this.modalService.open('#errorModal'); 
+  private handleEmptyTurns(message: string): void {
+    this.errorMessage = message;
+    this.showTemporaryDiv();
   }
 
-  atenderTurno(turno: iTurnoConId){
-    turno.Estado = "Atendido";
+  private updateTurnos(turnosData: any): void {
+    this.turnos = turnosData.map((turno: any) => ({
+      IdTurno: turno.idTurno,
+      IdUsuario: turno.idUsuario,
+      IdSucursal: turno.idSucursal,
+      FechaTurno: new Date(turno.fechaTurno),
+      Estado: turno.estado
+    }));
+  }
+
+  private showTemporaryDiv(): void {
+    this.showDiv = true;
+    setTimeout(() => this.showDiv = false, 5000);
+  }
+
+  private handleError(error: any): void {
+    console.error('Error:', error);
+    this.errorMessage = error;
+    this.showTemporaryDiv();
+  }
+
+  atenderTurno(turno: iTurnoConId): void {
+    this.updateTurnoState(turno, "Atendido");
+  }
+
+  private updateTurnoState(turno: iTurnoConId, estado: string): void {
+    turno.Estado = estado;
+    this.errorMessage = "";
     this.turnoService.ActualizarTurno(turno).subscribe(
-      (response: any) => {          
-        this.turnoService.ObtenerTurnosActivados().subscribe(
-          (response: any) => {
-            console.log('response', response);
-            this.turnos = response.map((turno: any) => ({
-              IdTurno: turno.idTurno,
-              IdUsuario: turno.idUsuario,
-              IdSucursal: turno.idSucursal,
-              FechaTurno: new Date(turno.fechaTurno),
-              Estado: turno.estado
-            }));
-          },
-          (error: any) => {
-            console.error('Error:', error);
-            this.errorMessage = error;
-            this.openErrorModal();
-          }
-        );     
-      },
-      (error: any) => {
-        console.error('Error:', error);
-        this.errorMessage = error;
-        this.openErrorModal();
-      }
+      () => this.refreshActiveTurns(),
+      (error: any) => this.handleError(error)
     );
-  }  
+  }
+
+  private refreshActiveTurns(): void {
+    this.turnoService.ObtenerTurnosActivados().subscribe(
+      (response: any) => {
+        if (response.message === "No hay turnos activados.") {
+          this.handleEmptyTurns(response.message);
+          this.turnos = [];
+        } else {
+          this.updateTurnos(response);
+        }
+      },
+      (error: any) => this.handleError(error)
+    );
+  }
 }
