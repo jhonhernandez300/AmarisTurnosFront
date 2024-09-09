@@ -101,7 +101,7 @@ export class GuardarTurnoComponent {
     this.cdr.detectChanges();
   }
 
-  private handleError(error: any): void {
+  private handleError(error: { message: string }): void {
     console.error('Error:', error);
     this.errorMessage = error.message || 'Error desconocido';
     this.showTemporaryDiv();
