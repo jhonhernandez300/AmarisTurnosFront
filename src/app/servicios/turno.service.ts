@@ -13,6 +13,15 @@ export class TurnoService {
 
   constructor(private http: HttpClient) { }
 
+  ContarTurnos(id: number): Observable<any> {         
+    return this.http.get(`${this.apiUrl}/Turno/ContarTurnos` + "/" + id).pipe(
+      catchError(error => {
+          console.error('Error en la solicitud:', error);
+          return throwError(error);
+      })    
+    );    
+  }
+
   ObtenerTurnosActivados(): Observable<any> {         
     return this.http.get(`${this.apiUrl}/Turno/ObtenerTurnosActivados`).pipe(
       catchError(error => {

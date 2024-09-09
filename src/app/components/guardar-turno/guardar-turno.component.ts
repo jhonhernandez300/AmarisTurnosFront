@@ -46,12 +46,36 @@ export class GuardarTurnoComponent {
     this.turnoForm.reset();
   }
 
-  public onSubmit(): void {
+  private contarTurnos(id: number): Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.turnoService.ContarTurnos(id).subscribe(
+        response => {
+          console.log('ContarTurnos response:', response); 
+          resolve(response);  
+        },
+        error => {
+          this.handleError(error);
+          resolve(-1);  
+        }
+      );
+    });
+  }
+  
+  public async onSubmit(): Promise<void> {
     this.submitted = true;
     this.errorMessage = '';
-    this.createTurno();
+    const id = this.localStorageService.getData("id");
+  
+    // Esperando la respuesta
+    const cantidad: number = await this.contarTurnos(id);  
+    console.log(cantidad);  
+    if(cantidad <= 5) {
+      this.createTurno();
+    }else{
+      this.handleError({ message: "El usuario ya tiene 5 turnos." });
+    }         
   }
-
+  
   private createTurno(): void {
     const turno: iTurnoSinId = this.buildTurno();
     this.turnoService.Crear(turno).subscribe(
