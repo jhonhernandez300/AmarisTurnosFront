@@ -27,16 +27,19 @@
           <div class="form-group">
             <button type="button" class="btn btn-secondary w-100" (click)="onReset()">Limpiar</button>
           </div>
-          
+          <div *ngIf="showDiv" class="temporary-div">
+            {{ errorMessage }}
+        </div>  
         </form>
+        
       </div>
     </div>
   </div>
 
 
-<div class="container pt-1" *ngIf="mostrarTabla == true">
+<div class="container pt-3" *ngIf="mostrarTabla == true">
     <div class="card">
-      <div class="card-header">
+      <div class="card-header text-center">
         <h2>Turno Encontrado</h2>
       </div>
       <div class="card-body">

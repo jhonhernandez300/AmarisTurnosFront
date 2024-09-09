@@ -15,6 +15,7 @@ export class BuscarTurnoPorIdComponent implements OnInit {
   errorMessage: string = '';
   mostrarTabla: boolean = false;
   botonAMostrar: string = "ninguno";
+  showDiv: boolean = false;
   
   turnoEncontrado: iTurnoConId = this.resetTurnoEncontrado();
 
@@ -40,6 +41,8 @@ export class BuscarTurnoPorIdComponent implements OnInit {
 
   onSubmit(): void {
     this.submitted = true;
+    this.showDiv = false;
+
     if (this.myForm.valid) {
       this.obtenerTurnoPorId(this.myForm.value.Turno);
     }
@@ -49,21 +52,49 @@ export class BuscarTurnoPorIdComponent implements OnInit {
     this.submitted = false;
     this.myForm.reset();
     this.mostrarTabla = false;
-  }
+    this.showDiv = false;
+  } 
 
-  openErrorModal(): void {
-    this.modalService.open('#errorModal');
+  private turnoConMasDe15Minutos(): boolean{
+    // Fecha y hora del turno en milisegundos
+    const fechaTurno = new Date(this.turnoEncontrado.FechaTurno).getTime(); 
+    const fechaActual = new Date().getTime(); 
+    // Diferencia en minutos
+    const diferenciaMinutos = Math.abs(fechaActual - fechaTurno) / (1000 * 60); 
+
+      if (diferenciaMinutos <= 15) {
+        return false;
+    } else {
+        return true;
+    }
   }
 
   activarTurno(): void {
-    this.actualizarEstadoTurno("Activado", "atender");
-  }
+      if (this.turnoConMasDe15Minutos() == false) {
+        this.actualizarEstadoTurno("Activado", "atender");
+    } else {
+      this.actualizarEstadoTurno("Expirado", "ninguno")
+      this.errorMessage = "El turno tiene más de 15 minutos, solicite uno nuevo";
+      this.showDiv = true;
+    }
+  }  
 
   atenderTurno(): void {
     this.actualizarEstadoTurno("Atendido", "ninguno");
   }
 
-  // Métodos auxiliares:
+  private actualizarEstadoTurno(nuevoEstado: string, nuevoBoton: string): void {
+    this.turnoEncontrado.Estado = nuevoEstado;
+    this.turnoService.ActualizarTurno(this.turnoEncontrado).subscribe(
+      () => {
+        this.botonAMostrar = nuevoBoton;
+        this.onReset();
+      },
+      (error: any) => {
+        this.mostrarError(error);
+      }
+    );
+  }  
 
   private resetTurnoEncontrado(): iTurnoConId {
     return {
@@ -106,21 +137,15 @@ export class BuscarTurnoPorIdComponent implements OnInit {
     }
   }
 
-  private actualizarEstadoTurno(nuevoEstado: string, nuevoBoton: string): void {
-    this.turnoEncontrado.Estado = nuevoEstado;
-    this.turnoService.ActualizarTurno(this.turnoEncontrado).subscribe(
-      () => {
-        this.botonAMostrar = nuevoBoton;
-        this.onReset();
-      },
-      (error: any) => {
-        this.mostrarError(error);
-      }
-    );
+  showTemporaryDiv() {
+    this.showDiv = true; 
+    setTimeout(() => {
+      this.showDiv = false; 
+    }, 5000);
   }
 
   private mostrarError(error: any): void {
     this.errorMessage = error;
-    this.openErrorModal();
+    this.showDiv = true;
   }
 }
