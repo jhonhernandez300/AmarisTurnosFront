@@ -51,7 +51,7 @@ export class GuardarTurnoComponent {
       this.turnoService.ContarTurnos(id).subscribe(
         response => {
           console.log('ContarTurnos response:', response); 
-          resolve(response);  
+          resolve(response.numeroDeTurnos);  
         },
         error => {
           this.handleError(error);
@@ -67,8 +67,9 @@ export class GuardarTurnoComponent {
     const id = this.localStorageService.getData("id");
   
     // Esperando la respuesta
-    const cantidad: number = await this.contarTurnos(id);  
-    console.log(cantidad);  
+    const cantidad = await this.contarTurnos(id); 
+    console.log(cantidad);
+
     if(cantidad <= 5) {
       this.createTurno();
     }else{
@@ -102,7 +103,7 @@ export class GuardarTurnoComponent {
   }
 
   private handleError(error: { message: string }): void {
-    console.error('Error:', error);
+    console.error('Error:', error.message);
     this.errorMessage = error.message || 'Error desconocido';
     this.showTemporaryDiv();
   }
