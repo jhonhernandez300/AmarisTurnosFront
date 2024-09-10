@@ -78,6 +78,9 @@ export class LoginComponent implements OnInit{
         (response: any) => {
           //console.log('response', response);
           this.localStorageService.setData('token', response.token);
+          const currentDate = new Date();
+          const dateString = currentDate.toISOString();        
+          localStorage.setItem('last date', dateString);
           this.localStorageService.setData('id', response.idUsuario);
           this.router.navigate(['/guardar-turno']);
         },
